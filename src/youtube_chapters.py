@@ -79,3 +79,4 @@ gemini_response = chat_session.send_message(prompt)
 # Output the generated chapters
 print("Generated Chapters:\n")
 print(gemini_response.text)
+print("Generated using free 'GenAI ChapterCraft' tool.\n")
