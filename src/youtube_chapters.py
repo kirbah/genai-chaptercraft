@@ -25,11 +25,19 @@ transcript_text = "\n".join([segment["text"]
 
 
 prompt = (
-    "Based on the following transcript, generate a chapter list following these instructions:\n"
-    "1. Identify key topic shifts and assign each a starting timestamp in MM:SS format.\n"
-    "2. Format each chapter as '<timestamp> <chapter title>' (e.g., '00:00 Introduction').\n"
-    "3. Then, review the chapter list and if any chapter boundary seems misaligned (i.e., if two adjacent chapters do not clearly reflect a topic change), adjust or remove that boundary.\n"
-    "Only output the final, self-reviewed chapter list without any extra commentary.\n\n"
+    "Based on the following transcript, generate a chapter list following these precise instructions:\n"
+    "1. Identify **distinct and major topic shifts** in the transcript. Each significant topic change marks the start of a new chapter.  Focus on clear transitions in the subject matter discussed.\n"
+    "2. For each chapter, determine the starting timestamp in MM:SS format **at the exact point where the topic clearly transitions to a new subject**.\n"
+    "3. Format each chapter as a single line: '<timestamp> <chapter title>' (e.g., '00:00 Introduction'). Chapter titles should be concise (under 10 words) and accurately represent the chapter's primary topic.\n"
+    "4. After generating the initial chapter list, **critically self-review** it for topic coherence. Ensure each chapter break corresponds to a genuine, significant topic change. Eliminate any chapter boundaries that are weak, ambiguous, or do not represent a clear shift in the discussion. The goal is to create chapters that represent meaningful thematic sections of the video.\n"
+    "5. The final output should ONLY be the self-reviewed chapter list, with each chapter on a new line and in the specified '<timestamp> <chapter title>' format. Do not include any introductory or concluding sentences, explanations, or commentary.\n"
+    "\n"
+    "Example of the desired output format:\n"
+    "00:00 Introduction to the Topic\n"
+    "01:45 Deep Dive into Subject A\n"
+    "05:20 Exploring Subject B\n"
+    "08:30 Conclusion and Summary\n"
+    "\n"
     "### Transcript:\n"
     f"{transcript_text}\n\n"
     "Chapters:"
@@ -46,7 +54,7 @@ genai.configure(api_key=gemini_api_key)
 
 # Set up the Gemini API generation configuration
 generation_config = {
-    "temperature": 0.5,
+    "temperature": 0.0,
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 500,
