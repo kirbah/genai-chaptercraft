@@ -6,7 +6,8 @@ This project provides tools for generating chapters from YouTube videos using Ge
 
 The main components of this project are:
 
-- `GenAI_ChapterCraft.ipynb`: A Jupyter Notebook containing a playground with various features and experimentation related to chapter generation.
+- `GenAI_ChapterCraft.ipynb`: A Jupyter Notebook containing a playground with various features and experimentation related to chapter generation. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kirbah/genai-chaptercraft/blob/main/GenAI_ChapterCraft.ipynb)
+- `GenAI_ChapterCraft_YouTube.ipynb`: A Jupyter Notebook focused on generating chapters specifically from YouTube videos. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kirbah/genai-chaptercraft/blob/main/GenAI_ChapterCraft_YouTube.ipynb)
 - `src/youtube_chapters.py`: A Python script to generate chapters for a given YouTube video.
 
 ## Running `youtube_chapters.py`
