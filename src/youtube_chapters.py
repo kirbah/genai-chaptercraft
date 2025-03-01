@@ -6,7 +6,6 @@ import re
 
 # Specify the YouTube video URL and the desired number of chapters
 video_url = "https://www.youtube.com/watch?v=A9WY_HZUK8Q"
-num_chapters = 0  # More than 3 chapters should be created. Either specified number of chapters generated or LLM will try to decide the best number of chapters
 
 
 def extract_video_id(url):
@@ -24,25 +23,13 @@ transcript_segments = YouTubeTranscriptApi.get_transcript(video_id)
 transcript_text = "\n".join([segment["text"]
                             for segment in transcript_segments])
 
-# Prepare the prompt for Gemini chapter generation
-if num_chapters:
-    chapter_generation_line = f"2. Generate exactly {num_chapters} distinct, non-overlapping chapters that cover different aspects of the video.\n"
-else:
-    chapter_generation_line = "2. Generate distinct, non-overlapping chapters that cover different aspects of the video.\n"
 
 prompt = (
-    "Based on the following transcript, please perform the following steps internally and then output a single final chapter list:\n"
-    "1. Analyze the transcript and identify its key segments with approximate starting timestamps in MM:SS format.\n"
-    f"{chapter_generation_line}"
-    "3. The very first chapter must start at 00:00. All subsequent chapters should use the timestamp corresponding to when the segment begins, and the timestamps must be in ascending order with a minimum gap of 10 seconds between chapters.\n"
-    "4. Format each chapter on its own line using the format '<timestamp> <chapter title>'. For example, '00:00 Introduction'.\n"
-    "5. Do not include any additional commentary, explanations, chain-of-thought, or intermediate reasoning—only the final chapter list.\n"
-    "6. Ensure that only one chapter list is generated and that there are no duplicate chapters or timestamps.\n\n"
-    "Example:\n"
-    "00:00 Introduction\n"
-    "01:24 Key Concepts Overview\n"
-    "08:56 Comparative Insights\n"
-    "09:31 Conclusion and Next Steps\n\n"
+    "Based on the following transcript, generate a chapter list following these instructions:\n"
+    "1. Identify key topic shifts and assign each a starting timestamp in MM:SS format.\n"
+    "2. Format each chapter as '<timestamp> <chapter title>' (e.g., '00:00 Introduction').\n"
+    "3. Then, review the chapter list and if any chapter boundary seems misaligned (i.e., if two adjacent chapters do not clearly reflect a topic change), adjust or remove that boundary.\n"
+    "Only output the final, self-reviewed chapter list without any extra commentary.\n\n"
     "### Transcript:\n"
     f"{transcript_text}\n\n"
     "Chapters:"
@@ -59,7 +46,7 @@ genai.configure(api_key=gemini_api_key)
 
 # Set up the Gemini API generation configuration
 generation_config = {
-    "temperature": 1,
+    "temperature": 0.5,
     "top_p": 0.95,
     "top_k": 64,
     "max_output_tokens": 500,
