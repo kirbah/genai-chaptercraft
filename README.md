@@ -1,67 +1,57 @@
-# GenAI ChapterCraft: Automatic Video Chapter Generator
+# GenAI ChapterCraft Project
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kirbah/genai-chaptercraft/blob/main/GenAI_ChapterCraft.ipynb)
-
-GenAI ChapterCraft is a free, open-source tool that automatically generates chapters for your videos using the power of AI.  It leverages state-of-the-art speech recognition (Whisper) and large language models (LLMs) like Gemini and models available via the Hugging Face Inference API to create accurate and SEO-friendly chapter titles with timestamps.  This tool saves you valuable time and effort, improves video discoverability, and enhances the viewer experience.
+This project provides tools for generating chapters from YouTube videos using Generative AI.
 
 ## Overview
 
-This project provides a single, self-contained Google Colab notebook (`GenAI_ChapterCraft.ipynb`) that handles the entire process:
+The main components of this project are:
 
-1.  **Video Input:**  Provide a video URL (e.g., YouTube, Vimeo).  For YouTube videos, the tool can try to retrieve an existing transcript for speed.
-2.  **Audio Extraction (if needed):** If no YouTube transcript is found, the notebook downloads the audio.
-3.  **Transcription:**  The audio is transcribed to text using the highly accurate Whisper model from OpenAI.
-4.  **SRT Conversion:** The transcript is converted to the standard SRT (SubRip) subtitle format.
-5.  **Chapter Generation:**  An LLM (Gemini or a Hugging Face model) analyzes the SRT transcript and intelligently generates chapters with appropriate titles and timestamps.
+- `GenAI_ChapterCraft.ipynb`: A Jupyter Notebook containing a playground with various features and experimentation related to chapter generation.
+- `src/youtube_chapters.py`: A Python script to generate chapters for a given YouTube video.
 
-## Key Features
+## Running `youtube_chapters.py`
 
-*   **Automatic Chapter Creation:**  Generate video chapters quickly and easily.
-*   **High-Quality Transcription:** Uses OpenAI's Whisper for accurate audio-to-text conversion.
-*   **Multiple LLM Options:** Choose between Google's Gemini API or models from the Hugging Face Inference API.
-*   **SRT Output:**  Provides the transcript in the widely-used SRT format.
-*   **GPU Acceleration:**  Automatically utilizes a GPU if available in Colab for faster processing.
-*   **Easy to Use:**  Simply run the Colab notebook, providing your video URL and API keys (if required).
-*   **Free and Open Source:**  No cost to use, and the code is available for modification and contribution.
+This script generates chapters for a YouTube video using the Gemini API.
 
-## Getting Started
+### Prerequisites
 
-The easiest way to use GenAI ChapterCraft is to open the notebook directly in Google Colab:
+1.  **Install Dependencies:** Install the required Python packages using pip:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/kirbah/genai-chaptercraft/blob/main/GenAI_ChapterCraft.ipynb)
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Click the "Open in Colab" badge above.  This will launch the notebook in your Colab environment.
+    This will install the following packages:
 
-**Steps within Colab:**
+    - `youtube-transcript-api`
+    - `google-generativeai`
 
-1.  **Set Secrets:**  In the Colab sidebar (left side), click the "key" icon to access the Secrets manager.  You *may* need to set the following, depending on your chosen video source and LLM:
-    *   `SUPADATA_TOKEN`:  *Only* required if retrieving existing YouTube transcripts. Obtain a token from [Supadata](https://supadata.ai/).
-    *   `HF_TOKEN`:  *Only* required if using a Hugging Face model for chapter generation.  Get a token from [Hugging Face](https://huggingface.co/settings/tokens).
-    *   `GEMINI_API_KEY`: *Only* required if using the Gemini API for chapter generation. Create an API key at [Google AI Studio](https://aistudio.google.com/apikey).
+2.  **Set Environment Variable:** You need to set the `GEMINI_API_KEY` environment variable with your Gemini API key. You can obtain an API key from [Google AI Studio](https://makersuite.google.com/app/apikey).
 
-2.  **Enter Video URL:**  Locate the code cell containing `video_url = ...` and replace the example URL with the URL of your video.
+    - **Windows (Command Prompt):**
 
-3.  **Adjust `num_chapters` (Optional):**  Modify the `num_chapters` variable if you want a specific number of chapters (minimum 3).
+      ```bash
+      set GEMINI_API_KEY=your_gemini_api_key
+      ```
 
-4.  **Run the Notebook:** Go to "Runtime" -> "Run all" (or press Ctrl + F9).
+    - **Windows (PowerShell):**
 
-5. **Review Output**: Examine the generated chapters and SRT transcript.
+      ```powershell
+      $env:GEMINI_API_KEY = "your_gemini_api_key"
+      ```
 
-## Requirements (within Colab)
+    - **Linux/macOS:**
+      ```bash
+      export GEMINI_API_KEY=your_gemini_api_key
+      ```
+      (Replace `your_gemini_api_key` with your actual Gemini API key.)
 
-The Colab notebook will automatically install the necessary libraries (`yt_dlp`, `transformers`, `huggingface_hub`, `supadata`, `safetensors`).  A GPU runtime is highly recommended for faster processing, especially with larger videos.
+### Usage
 
-## Limitations
+Once you have installed the dependencies and set the environment variable, you can run the script:
 
-*   **YouTube Transcript Availability:** For YouTube videos, the tool relies on the *existence* of a pre-generated transcript for optimal speed.  If no transcript is available, downloading and transcribing the audio will take significantly longer.  Direct YouTube video download is sometimes unreliable due to issues with the underlying `yt-dlp` library.
-*   **LLM Variability:** The quality of generated chapters depends on the LLM used.  You may need to experiment with different models or adjust the prompt for optimal results.
-*   **Video Length:** Very long videos may require significant processing time, even with a GPU.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions for improvements, bug fixes, or new features, please open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+```bash
+python src/youtube_chapters.py
 ```
+
+The script will fetch the transcript of the YouTube video specified in the `video_url` variable within the script, generate chapters using the Gemini API, and print the generated chapters to the console. You may change `video_url` variable to generate chapters for another video.
