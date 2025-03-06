@@ -19,9 +19,18 @@ def extract_video_id(url):
 # Retrieve video ID and transcript
 video_id = extract_video_id(video_url)
 transcript_segments = YouTubeTranscriptApi.get_transcript(video_id)
-# Combine transcript text segments into a single string
-transcript_text = "\n".join([segment["text"]
-                            for segment in transcript_segments])
+# Combine transcript text segments into a single string, including timestamps
+transcript_text = ""
+for segment in transcript_segments:
+    start_seconds = int(segment["start"])
+    hours = start_seconds // 3600
+    minutes = (start_seconds % 3600) // 60
+    seconds = start_seconds % 60
+    if hours > 0:
+        start_time = "{:02d}:{:02d}:{:02d}".format(hours, minutes, seconds)
+    else:
+        start_time = "{:02d}:{:02d}".format(minutes, seconds)
+    transcript_text += f"{start_time} {segment['text']}\n"
 
 
 prompt = (
@@ -57,7 +66,7 @@ generation_config = {
     "temperature": 0.0,
     "top_p": 0.95,
     "top_k": 64,
-    "max_output_tokens": 500,
+    "max_output_tokens": 1000,
     "response_mime_type": "text/plain",
 }
 
