@@ -51,7 +51,12 @@ prompt = (
     f"{transcript_text}\n\n"
     "Chapters:"
 )
-
+# creating a temporary directory
+if not os.path.exists("temp"):
+    os.makedirs("temp")
+# writing the prompt to a file
+with open("temp/youtube_chapters_prompt.txt", "w") as file:
+    file.write(prompt)
 
 # Configure the Gemini API key from the environment variable
 gemini_api_key = os.getenv("GEMINI_API_KEY")
