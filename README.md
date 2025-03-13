@@ -55,4 +55,14 @@ Once you have installed the dependencies and set the environment variable, you c
 python src/youtube_chapters.py
 ```
 
-The script will fetch the transcript of the YouTube video specified in the `video_url` variable within the script, generate chapters using the Gemini API, and print the generated chapters to the console. You may change `video_url` variable to generate chapters for another video.
+The script will fetch the transcript of the YouTube video, generate chapters using the Gemini API, and print the generated chapters to the console.
+
+### Command-line Argument
+
+You can provide the YouTube video URL as a command-line argument:
+
+```bash
+python src/youtube_chapters.py [video_url]
+```
+
+Replace `[video_url]` with the actual YouTube video URL. If no URL is provided, it will use a default URL hardcoded in the script.
